@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Reimbursement</title>
+</head>
+<style>
+    table, th, td {
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
+</style>
+<body>
+    <form onsubmit="return confirm('Comfirm deleting this reimbursement?')">
+        <h1>Delete Reimbursement</h1>
+        <label>Enter Reimbursement ID#: </label>
+        <input type="number" id="reimbursementId" required>
+        <button type="submit" onclick="deleteReimbursement()">Submit</button>
+    </form>
+    
+    <h1 style="text-align: center">Current Reimbursements</h1>
+    <table style="width: 75%;" id="reimbursementTable"></table><br><br>
+    <button type="button" onclick="returnMainMenu()">Back</button>
+</body>
+<style>
+    body{
+        padding: 50px;
+        text-align: center;
+        background-color: #1e2124;
+    }
+
+    h1{
+        color: white;
+    }
+
+    label{
+        padding: 0 20px;
+        color: white;
+    }
+
+    button{
+        background: #424549;
+        background-image: -webkit-linear-gradient(top, #424549, #1e2124);
+        background-image: -moz-linear-gradient(top, #424549, #1e2124);
+        background-image: -ms-linear-gradient(top, #424549, #1e2124);
+        background-image: -o-linear-gradient(top, #424549, #1e2124);
+        background-image: linear-gradient(to bottom, #424549, #1e2124);
+        -webkit-border-radius: 25;
+        -moz-border-radius: 25;
+        border-radius: 25px;
+        font-family: Arial;
+        color: #ffffff;
+        font-size: 20px;
+        padding: 10px 20px 10px 20px;
+        text-decoration: none;
+    }
+
+    button:hover{
+        background: #7289da;
+        text-decoration: none;
+    }
+</style>
+<script>
+    let currentUserId = window.localStorage.getItem('userId');
+    let currentUserStatus = localStorage.getItem('admin');
+    (async function getReimbursement() {
+        
+        let url = 'http://localhost:8080/Vraj-Pandya-P1/reimbursement?user-id=' + currentUserId;
+        let response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8'
+            }
+        });
+ 
+            let array = await response.json();
+            let htmlElement = document.getElementById('reimbursementTable');
+            htmlElement.style.border = "1px solid black" ;
+            htmlElement.style.background = "#7289da";
+            
+            htmlElement.innerHTML = "<tr><th style='width: 5%; border: 1px solid black'>User ID#</th>" +
+                "<th style='width: 5%; border: 1px solid black'>Reimbursement ID#</th>" +
+                "<th style='width: 20%; border: 1px solid black'>Title</th>" +
+                "<th style='width: 10%; border: 1px solid black'>Amount</th>" +
+                "<th style='border: 1px solid black'>Message</th>" +
+                "<th style='width: 10%; border: 1px solid black'>Status</th></tr>"
+            
+            
+            for(let i = 0; i < array.length; i++){
+                let reimbursement = array[i];
+                htmlElement.innerHTML += "<tr><td style='width: 5%; border: 1px solid black'>" + reimbursement.userId + 
+                "</td><td style='width: 5%; border: 1px solid black'>" + reimbursement.reimbursementId + 
+                "</td><td style='border: 1px solid black'>" + reimbursement.title + 
+                "</td><td style='width: 10%; border: 1px solid black'>" + reimbursement.amount + 
+                "</td><td style='border: 1px solid black'>" + reimbursement.message + 
+                "</td><td style='width: 10%; border: 1px solid black'>" + reimbursement.status + 
+                "</td></tr>"
+            }
+    })(reimbursementId);
+    async function deleteReimbursement() {
+        let reimbursementId = document.getElementById("reimbursementId").value;
+        let url = 'http://localhost:8080/Vraj-Pandya-P1/reimbursement?reimbursement-id=' + reimbursementId;
+        let response = await fetch(url, {
+            method: 'DELETE',
+            headers:{
+                'Content-Type': 'application/json; charset=utf-8'
+            }
+        });
+
+        if (response.status == 200) {
+            alert("Reimbursement has been deleted")
+        }
+    };
+    async function returnMainMenu() {
+        location.href = 'file:///C:/Users/user/Documents/Revature/Vraj-Pandya-P1/UI/User/mainMenu.html';
+    }
+</script>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete User</title>
+</head>
+<body>
+    <form onsubmit="return false">
+        <h1>Delete User</h1><br>
+        <label>Enter User ID Number: </label>
+        <input type="number" id="userId" required>
+        <button type="submit" onclick="deleteUser()">Submit</button>
+    </form>
+    <button type="submit" onclick="returnMainMenu()">Back</button>
+</body>
+<style>
+    body{
+        padding: 50px;
+        text-align: center;
+        background-color: #1e2124;
+    }
+
+    h1{
+        color: white;
+    }
+
+    label{
+        padding: 0 20px;
+        color: white;
+    }
+
+    button{
+        background: #424549;
+        background-image: -webkit-linear-gradient(top, #424549, #1e2124);
+        background-image: -moz-linear-gradient(top, #424549, #1e2124);
+        background-image: -ms-linear-gradient(top, #424549, #1e2124);
+        background-image: -o-linear-gradient(top, #424549, #1e2124);
+        background-image: linear-gradient(to bottom, #424549, #1e2124);
+        -webkit-border-radius: 25;
+        -moz-border-radius: 25;
+        border-radius: 25px;
+        font-family: Arial;
+        color: #ffffff;
+        font-size: 20px;
+        padding: 10px 20px 10px 20px;
+        text-decoration: none;
+    }
+
+    button:hover{
+        background: #7289da;
+        text-decoration: none;
+    }
+</style>
+<script>
+    async function deleteUser() {
+        let userId = document.getElementById("userId").value;
+        let url = 'http://localhost:8080/Vraj-Pandya-P1/user?user-id=' + userId;
+        let response = await fetch(url, {
+            method: 'DELETE',
+            headers:{
+                'Content-Type': 'application/json; charset=utf-8'
+            }
+        });
+        
+        if (response.status == 200) {
+            alert("User has been deleted")
+        }else{
+            alert("User does not exist!")
+        }
+        
+    };
+    async function returnMainMenu() {
+        location.href = 'file:///C:/Users/user/Documents/Revature/Vraj-Pandya-P1/UI/Admin/adminMenu.html';
+    }
+</script>
+</html>
